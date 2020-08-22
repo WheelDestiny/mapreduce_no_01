@@ -9,7 +9,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 
 public class WcDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -30,6 +29,8 @@ public class WcDriver {
         //4.2,设置Reducer
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+
+        job.setCombinerClass(WcReducer.class);
 
         //5,设置输入输出数据源
         FileInputFormat.setInputPaths(job,new Path(args[0]));
