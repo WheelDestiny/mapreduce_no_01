@@ -30,6 +30,7 @@ public class WcDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
+        //启用Combiner
         job.setCombinerClass(WcReducer.class);
 
         //5,设置输入输出数据源
