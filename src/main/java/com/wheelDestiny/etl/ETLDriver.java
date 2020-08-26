@@ -28,7 +28,5 @@ public class ETLDriver {
         boolean b = job.waitForCompletion(true);
         System.exit(b?0:1);
 
-
-
     }
 }
