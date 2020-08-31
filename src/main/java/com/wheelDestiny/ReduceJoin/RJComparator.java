@@ -4,7 +4,6 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
 public class RJComparator extends WritableComparator {
-
     //传递一个容器进去
     public RJComparator() {
         super(OrderBean.class,true);

@@ -21,11 +21,12 @@ public class MJMapper extends Mapper<LongWritable, Text,Text, NullWritable> {
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
+        //获取缓存的文件列表
         URI[] uris = context.getCacheFiles();
         String path = uris[0].getPath().toString();
 
         //此处开流可以选择HDFS的流，但是HDFS的流对换行的处理非常差，使用readLine又会有编码问题
-
+        //将文件读入mapper
         BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
         String line;
         while (StringUtils.isNotEmpty(line = bufferedReader.readLine())){

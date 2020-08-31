@@ -24,7 +24,7 @@ public class RJDriver {
 
         job.setOutputKeyClass(OrderBean.class);
         job.setOutputValueClass(NullWritable.class);
-
+        //设定排序方式
         job.setGroupingComparatorClass(RJComparator.class);
 
         FileInputFormat.setInputPaths(job,new Path("D:\\input"));
