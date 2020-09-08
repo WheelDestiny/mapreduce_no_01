@@ -1,4 +1,4 @@
-package com.wheelDestiny.MR0907;
+package com.wheelDestiny.MR0908;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -11,10 +11,14 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import java.io.IOException;
 
-public class WordConut {
+import java.io.IOException;
+import java.util.Random;
+
+public class WordConut_b {
     public static class WordCountMapper extends Mapper<LongWritable, Text,Text,LongWritable> {
+        private long seqNo = 0L;
+
         private Text k = new Text();
         private LongWritable v = new LongWritable(1);
         @Override
@@ -24,13 +28,20 @@ public class WordConut {
             String[] s = value.toString().split(" ");
 
             for (String ss : s) {
-                k.set(ss);
+//                Random random = new Random();
+//                int i = random.nextInt(10);
+
+                k.set(ss+"_"+seqNo++);
+                if(seqNo>10){
+                    seqNo = 0;
+                }
                 context.write(k,v);
             }
 
         }
     }
     public static class WordCountRedece extends Reducer<Text,LongWritable,Text,LongWritable>{
+        private Text k = new Text();
         private LongWritable v = new LongWritable();
         private long sum = 0;
         @Override
@@ -42,7 +53,9 @@ public class WordConut {
                 sum++;
             });
             v.set(sum);
-            context.write(key,v);
+            String kk = key.toString().split("_")[0];
+            k.set(kk);
+            context.write(k,v);
 
         }
     }
@@ -56,7 +69,7 @@ public class WordConut {
 
         Job job = Job.getInstance(configuration,"WordCount");
 
-        job.setJarByClass(WordConut.class);
+        job.setJarByClass(WordConut_b.class);
 
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountRedece.class);
@@ -66,7 +79,7 @@ public class WordConut {
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(LongWritable.class);
-//        job.setNumReduceTasks(2);
+        job.setNumReduceTasks(2);
 
         FileInputFormat.setInputPaths(job,new Path("D:\\input"));
 

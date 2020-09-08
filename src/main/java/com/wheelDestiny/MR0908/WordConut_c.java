@@ -1,4 +1,4 @@
-package com.wheelDestiny.MR0907;
+package com.wheelDestiny.MR0908;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -11,19 +11,24 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
 import java.io.IOException;
 
-public class WordConut {
+public class WordConut_c {
     public static class WordCountMapper extends Mapper<LongWritable, Text,Text,LongWritable> {
+
         private Text k = new Text();
         private LongWritable v = new LongWritable(1);
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             //统计map方法总共执行了多少次
-            context.getCounter("wheelDestiny","TestNumLine").increment(1L);
+            context.getCounter("wheelDestiny","MapNum").increment(1L);
             String[] s = value.toString().split(" ");
 
             for (String ss : s) {
+//                Random random = new Random();
+//                int i = random.nextInt(10);
+
                 k.set(ss);
                 context.write(k,v);
             }
@@ -36,10 +41,10 @@ public class WordConut {
         @Override
         protected void reduce(Text key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
             //统计reduce方法一共执行了多少次
-            context.getCounter("wheelDestinyRR","TestNumKey").increment(1L);
+            context.getCounter("wheelDestiny","ReduceNum").increment(1L);
             sum =0;
-            values.forEach((v)->{
-                sum++;
+            values.forEach((vv)->{
+                sum+=vv.get();
             });
             v.set(sum);
             context.write(key,v);
@@ -56,7 +61,7 @@ public class WordConut {
 
         Job job = Job.getInstance(configuration,"WordCount");
 
-        job.setJarByClass(WordConut.class);
+        job.setJarByClass(WordConut_c.class);
 
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountRedece.class);
@@ -66,7 +71,7 @@ public class WordConut {
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(LongWritable.class);
-//        job.setNumReduceTasks(2);
+        job.setCombinerClass(WordCountRedece.class);
 
         FileInputFormat.setInputPaths(job,new Path("D:\\input"));
 
