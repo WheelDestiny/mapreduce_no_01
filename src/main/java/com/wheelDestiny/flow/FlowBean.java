@@ -77,6 +77,5 @@ public class FlowBean implements Writable {
         upFlow = dataInput.readLong();
         downFlow  = dataInput.readLong();
         sumFlow  = dataInput.readLong();
-
     }
 }
