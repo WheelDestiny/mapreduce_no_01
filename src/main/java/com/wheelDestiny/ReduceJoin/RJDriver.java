@@ -1,6 +1,5 @@
 package com.wheelDestiny.ReduceJoin;
 
-import com.sun.tools.corba.se.idl.constExpr.Or;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
