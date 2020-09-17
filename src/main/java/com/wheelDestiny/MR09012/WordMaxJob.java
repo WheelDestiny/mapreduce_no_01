@@ -9,6 +9,7 @@ import org.apache.hadoop.mapreduce.lib.jobcontrol.JobControl;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WordMaxJob extends Configured implements Tool {
